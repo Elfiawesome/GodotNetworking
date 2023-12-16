@@ -28,7 +28,7 @@ func _JoinServer():
 		print("Couldn't connect to "+Address+": "+str(Port))
 		FailureInConnection()
 
-func _process(delta):
+func _process(_delta):
 	if myclientdata!=null:
 		myclientdata.connection.poll()
 		var _status=myclientdata.connection.get_status()
@@ -51,7 +51,8 @@ func _process(delta):
 			FailureInConnection()
 		
 		#Check for incoming packets
-		if myclientdata.peer.get_available_packet_count()>0:
+		while (myclientdata.peer.get_available_packet_count() > 0):
+			# Update: I'm not too sure whats the difference between myclientdata.peer & myclientdata.connection because they seem to do the same thing?
 			var data_received = myclientdata.peer.get_var()
 			print("CLIENT: received data " + str(data_received))
 			emit_signal("ReceiveData",data_received)
